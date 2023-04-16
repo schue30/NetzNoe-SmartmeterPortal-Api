@@ -1,0 +1,10 @@
+### IntelliJ ###
+.idea/
+
+### Python ###
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+
+dist/
