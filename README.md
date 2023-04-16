@@ -99,3 +99,8 @@ renamed in the implemented Python models.
 | jointTenancyProportionValues     | joint_tenancy_proportion       | kWh  |
 | peakDemands                      | peak_demands                   | kW   |
 | is_mixed                         | *< ignored >*                  |      |
+
+## Legal
+
+Disclaimer: This is not affiliated, endorsed or certified by Netz NÖ. This is an independent and unofficial API.
+Provided as is. Use at your own risk.
