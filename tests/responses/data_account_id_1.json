@@ -1,0 +1,32 @@
+[
+  {
+    "gpNumber": "12345678",
+    "accountId": "000030012345",
+    "externalPowerSupply": true,
+    "separatedAccounting": true,
+    "deliveryByEMail": false,
+    "deliveryByPortal": false,
+    "facilityDescription": "",
+    "hasSmartMeter": true,
+    "hasElectricity": true,
+    "hasGas": false,
+    "hasCommunicative": true,
+    "hasOptIn": true,
+    "hasActive": true,
+    "address": {
+      "seriennummer": null,
+      "ort": "",
+      "plz": "",
+      "strasse": "",
+      "hausnummer": "",
+      "hausnummerErgaenzung": "",
+      "ortsteil": "",
+      "zusatz": "",
+      "adresszusatz": {
+        "stiege": "",
+        "stock": "",
+        "tuernummer": ""
+      }
+    }
+  }
+]

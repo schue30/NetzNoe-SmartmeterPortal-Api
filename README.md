@@ -3,7 +3,7 @@
 This project is an unofficial implementation of the NetzNÖ Smartmeter Portal API (https://smartmeter.netz-noe.at/).
 It cleans up any null values from the API response and maps it to usable Python objects.
 
-Supports: **Python 3.7+**
+Supports: **Python 3.9+**
 
 ## Installation
 
@@ -15,6 +15,7 @@ pip3 install netznoe-smartmeter-portal-api
 
 ```python
 from pendulum import Date
+
 from netznoe_smartmeter_portal_api import NetzNoeSmartmeterPortalApi
 
 meter_id = 'AT0020000000000000000000020xxxxxx'
@@ -27,37 +28,46 @@ api.do_login()
 # returns monthly aggregated data
 yearly_values = api.get_year(meter_id, 2023)
 # SmartmeterResultYearly(
-#   consumption={
-#     Date(2023, 1, 1): 100.001,
+#   values={
+#     datetime.date(2023, 1, 1): 100.001,
 #     ...
 #   },
-#   grid_usage_leftover={},
+#   peak_demands={
+#     datetime.datetime(2023, 2, 18, 17, 15, 0, tzinfo=zoneinfo.ZoneInfo(key='Europe/Vienna')): 2.101, 
+#     ...
+#   },
 #   self_coverage={},
 #   self_coverage_renewable_energy={},
-#   joint_tenancy_proportion={},
-#   peak_demands={
-#     DateTime(2023, 2, 18, 17, 15, 0, tzinfo=Timezone('Europe/Vienna')): 2.101, 
-#     ...
-#   }
+#   grid_usage_leftover={},
+#   joint_tenancy_proportion={}
+#   blind_consumption={},
+#   blind_power_feed={},
 # )
 
 # returns daily aggregated data for the requested month
 monthly_values = api.get_month(meter_id, 2023, 3)
 # SmartmeterResult(
-#   consumption_metered={
-#     Date(2023, 3, 1): 1.810, 
+#   metered={
+#     datetime.date(2023, 3, 1): 1.810, 
 #     ...
 #   },
-#   consumption_estimated={}, 
-#   grid_usage_leftover={}, 
+#   metered_peak_demands={
+#     datetime.datetime(2023, 3, 1, 22, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='Europe/Vienna')): 0.012,
+#     ...
+#   },
+#   peak_demand_data_qualities={
+#     datetime.datetime(2023, 3, 1, 22, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='Europe/Vienna')): SmartmeterDataQuality.L1,
+#   },
+#   estimated={},
+#   estimated_qualities={},
+#   estimated_peak_demands={},
 #   self_coverage={}, 
 #   self_coverage_renewable_energy={}, 
+#   grid_usage_leftover={},
 #   joint_tenancy_proportion={}, 
-#   peak_demands_metered={
-#     DateTime(2023, 3, 1, 22, 0, 0, tzinfo=Timezone('Europe/Vienna')): 0.012,
-#     ...
-#   },
-#   peak_demands_estimated={}
+#   quality_ec={},
+#   blind_consumption={},
+#   blind_power_feed={}
 # )
 
 # returns daily aggregated data for the requested time range
@@ -75,30 +85,7 @@ api.do_logout()
 For easier usage and more meaningful naming of the fields provided by the NetzNÖ Smartmeter Portal API they have been
 renamed in the implemented Python models.
 
-### Python model "SmartmeterResult" (used by get_day(), get_week(), get_month()):
-
-| API field                        | Python model field             | Unit |
-|----------------------------------|--------------------------------|------|
-| meteredValues                    | consumption_metered            | kWh  |
-| estimatedValues                  | consumption_estimated          | kWh  |
-| gridUsageLeftoverValues          | grid_usage_leftover            | kWh  |
-| selfCoverageValues               | self_coverage                  | kWh  |
-| selfCoverageRenewableEnergyValue | self_coverage_renewable_energy | kWh  |
-| jointTenancyProportionValues     | joint_tenancy_proportion       | kWh  |
-| meteredPeakDemands               | peak_demands_metered           | kW   |
-| estimatedPeakDemands             | peak_demands_estimated         | kW   |
-
-### Python model "SmartmeterResultYearly" (used by get_year()):
-
-| API field                        | Python model field             | Unit |
-|----------------------------------|--------------------------------|------|
-| values                           | consumption                    | kWh  |
-| gridUsageLeftoverValues          | grid_usage_leftover            | kWh  |
-| selfCoverageValues               | self_coverage                  | kWh  |
-| selfCoverageRenewableEnergyValue | self_coverage_renewable_energy | kWh  |
-| jointTenancyProportionValues     | joint_tenancy_proportion       | kWh  |
-| peakDemands                      | peak_demands                   | kW   |
-| is_mixed                         | *< ignored >*                  |      |
+For description, unit and field mapping see comments in file `src/netznoe_smartmeter_portal_api/models.py`.
 
 ## Legal
 
