@@ -17,6 +17,7 @@ target-version = "py39"
 
 [tool.mypy]
 python_version = "3.9"
+exclude = ["example_pendulum.py"]
 warn_unused_configs = true
 warn_redundant_casts = true
 warn_unused_ignores = true
