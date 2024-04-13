@@ -1,0 +1,131 @@
+[
+  {
+    "ec_id": null,
+    "meteredValues": [
+      10.123,
+      10.123,
+      10.123,
+      10.123,
+      10.123,
+      10.123,
+      10.123
+    ],
+    "estimatedValues": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "estimatedQualities": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "gridUsageLeftoverValues": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "qualityEC": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "selfCoverageValues": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "jointTenancyProportionValues": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "meteredPeakDemands": [
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0
+    ],
+    "estimatedPeakDemands": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "peakDemandDataQualities": [
+      "L1",
+      "L1",
+      "L1",
+      "L1",
+      "L1",
+      "L1",
+      "L1"
+    ],
+    "peakDemandTimes": [
+      "2023-03-27T12:00:00",
+      "2023-03-28T12:00:00",
+      "2023-03-29T12:00:00",
+      "2023-03-30T12:00:00",
+      "2023-03-31T12:00:00",
+      "2023-04-01T12:00:00",
+      "2023-04-02T12:00:00"
+    ],
+    "selfCoverageRenewableEnergyValue": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "blindConsumptionValue": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "blindPowerFeedValue": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  }
+]

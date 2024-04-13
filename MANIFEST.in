@@ -1,0 +1,3 @@
+include LICENSE README.md
+recursive-include src/netznoe_smartmeter_portal_api *.py
+prune tests

@@ -1,5 +1,44 @@
-[build-system]
-requires = [
-    "setuptools >= 40.9.0",
+[tool.black]
+line-length = 120
+target-version = ["py39"]
+
+[tool.isort]
+profile = "black"
+line_length = 120
+known_first_party = ["netznoe_smartmeter_portal_api", "tests"]
+
+[tool.flake8]
+max-line-length = 120
+exclude = ["venv"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+
+[tool.mypy]
+python_version = "3.9"
+exclude = ["example_pendulum.py"]
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+no_implicit_optional = true
+strict_equality = true
+strict_concatenate = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+addopts = """
+    --cov src/netznoe_smartmeter_portal_api/
+    --no-cov-on-fail
+    --cov-fail-under=90
+    --cov-report=term-missing
+    --cov-branch
+"""
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
 ]
-build-backend = "setuptools.build_meta"

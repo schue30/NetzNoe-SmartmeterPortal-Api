@@ -1,0 +1,32 @@
+[
+  {
+    "halfMoon": null,
+    "energyCommunities": [],
+    "meteringPointId": "AT0020000000000000000000100123456",
+    "address": {
+      "seriennummer": "",
+      "ort": "",
+      "plz": "",
+      "strasse": "",
+      "hausnummer": "",
+      "hausnummerErgaenzung": "",
+      "ortsteil": "",
+      "zusatz": "",
+      "adresszusatz": {
+        "stiege": "",
+        "stock": "",
+        "tuernummer": ""
+      }
+    },
+    "typeOfRelation": "Einspeisung",
+    "ftmReadOut": true,
+    "ftmReadOutProvider": false,
+    "communityProductionFacility": false,
+    "hasFtmMeterData": true,
+    "validFrom": "2011-06-01T00:00:00",
+    "smartMeterType": "IME",
+    "locked": false,
+    "pointOfConsumption": "12345678",
+    "category": "01"
+  }
+]
