@@ -5,3 +5,5 @@ responses==0.25.0
 pytest==8.1.1
 pytest-cov==5.0.0
 safety==3.1.0
+# needed for mypy to check src/example_pendulum.py
+pendulum==2.1.2
