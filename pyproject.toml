@@ -28,7 +28,6 @@ check_untyped_defs = true
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
-mock_use_standalone_module = true
 addopts = """
     --cov src/netznoe_smartmeter_portal_api/
     --no-cov-on-fail
