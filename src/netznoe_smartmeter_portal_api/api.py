@@ -150,7 +150,7 @@ class NetzNoeSmartmeterPortalApi:
         ), resp.json()))
 
     def __get_values(self, data: dict, field: str, base_time: Union[date, datetime],
-                     time_increase: Dict[Literal['months', 'days', 'minutes'], int]
+                     time_increase: Dict[str, int]
                      ) -> List[Tuple[Union[date, datetime], Union[float, SmartmeterDataQuality]]]:
         results: List[Tuple[Union[date, datetime], Union[float, SmartmeterDataQuality]]] = []
         for value in data.get(field, []):
@@ -183,7 +183,7 @@ class NetzNoeSmartmeterPortalApi:
         return results
 
     def _calc_next_datetime(self, current_time: Union[date, datetime],
-                            time_increase: Dict[Literal['months', 'days', 'minutes'], int]) -> Union[date, datetime]:
+                            time_increase: Dict[str, int]) -> Union[date, datetime]:
         if 'months' in time_increase and isinstance(current_time, date):
             next_month = current_time.month + time_increase['months']
             next_year = current_time.year + int(next_month / 12) if next_month > 12 else current_time.year
