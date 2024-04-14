@@ -1,5 +1,5 @@
 from datetime import date, datetime, timedelta
-from typing import Dict, List, Union, Literal, no_type_check, Tuple
+from typing import Dict, List, Union, no_type_check, Tuple
 from zoneinfo import ZoneInfo
 
 import itertools
