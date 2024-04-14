@@ -14,8 +14,7 @@ pip3 install netznoe-smartmeter-portal-api
 ## Usage example
 
 ```python
-from pendulum import Date
-
+from datetime import date
 from netznoe_smartmeter_portal_api import NetzNoeSmartmeterPortalApi
 
 meter_id = 'AT0020000000000000000000020xxxxxx'
@@ -25,56 +24,60 @@ api.do_login()
 # ---
 # API Methods:
 
+# returns all metering points (meter_ids) of the user
+metering_points = api.get_metering_points()
+# meter_id = metering_points[0].metering_point_id  # get meter_id dynamically via API
+
 # returns monthly aggregated data
 yearly_values = api.get_year(meter_id, 2023)
 # SmartmeterResultYearly(
-#   values={
-#     datetime.date(2023, 1, 1): 100.001,
+#   values=[
+#     (datetime.date(2023, 1, 1), 100.001),
 #     ...
-#   },
-#   peak_demands={
-#     datetime.datetime(2023, 2, 18, 17, 15, 0, tzinfo=zoneinfo.ZoneInfo(key='Europe/Vienna')): 2.101, 
+#   ],
+#   peak_demands=[
+#     (datetime.datetime(2023, 2, 18, 17, 15, 0, tzinfo=zoneinfo.ZoneInfo(key='Europe/Vienna')), 2.101), 
 #     ...
-#   },
-#   self_coverage={},
-#   self_coverage_renewable_energy={},
-#   grid_usage_leftover={},
-#   joint_tenancy_proportion={}
-#   blind_consumption={},
-#   blind_power_feed={},
+#   ],
+#   self_coverage=[],
+#   self_coverage_renewable_energy=[],
+#   grid_usage_leftover=[],
+#   joint_tenancy_proportion=[],
+#   blind_consumption=[],
+#   blind_power_feed=[]
 # )
 
 # returns daily aggregated data for the requested month
 monthly_values = api.get_month(meter_id, 2023, 3)
 # SmartmeterResult(
-#   metered={
-#     datetime.date(2023, 3, 1): 1.810, 
+#   metered=[
+#     (datetime.date(2023, 3, 1), 1.810), 
 #     ...
-#   },
-#   metered_peak_demands={
-#     datetime.datetime(2023, 3, 1, 22, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='Europe/Vienna')): 0.012,
+#   ],
+#   metered_peak_demands=[
+#     (datetime.datetime(2023, 3, 1, 22, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='Europe/Vienna')), 0.012),
 #     ...
-#   },
-#   peak_demand_data_qualities={
-#     datetime.datetime(2023, 3, 1, 22, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='Europe/Vienna')): SmartmeterDataQuality.L1,
-#   },
-#   estimated={},
-#   estimated_qualities={},
-#   estimated_peak_demands={},
-#   self_coverage={}, 
-#   self_coverage_renewable_energy={}, 
-#   grid_usage_leftover={},
-#   joint_tenancy_proportion={}, 
-#   quality_ec={},
-#   blind_consumption={},
-#   blind_power_feed={}
+#   ],
+#   peak_demand_data_qualities=[
+#     (datetime.datetime(2023, 3, 1, 22, 0, 0, tzinfo=zoneinfo.ZoneInfo(key='Europe/Vienna')), SmartmeterDataQuality.L1),
+#   ],
+#   estimated=[],
+#   estimated_qualities=[],
+#   estimated_peak_demands=[],
+#   self_coverage=[],
+#   self_coverage_renewable_energy=[], 
+#   grid_usage_leftover=[],
+#   joint_tenancy_proportion=[], 
+#   quality_ec=[],
+#   blind_consumption=[],
+#   blind_power_feed=[]
 # )
 
 # returns daily aggregated data for the requested time range
-weekly_values = api.get_week(meter_id, start_date=Date(2023, 1, 2), end_date=Date(2023, 1, 8))
+weekly_values = api.get_week(meter_id, start_date=date(2023, 1, 2), end_date=date(2023, 1, 8))
 
 # returns 15min values of the requested day
-daily_values = api.get_day(meter_id, day=Date(2023, 4, 1))
+daily_values = api.get_day(meter_id, day=date(2023, 4, 1))
 
 # logout of the api
 api.do_logout()
