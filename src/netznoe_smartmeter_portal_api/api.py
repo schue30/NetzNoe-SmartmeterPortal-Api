@@ -1,7 +1,5 @@
-import logging
-import typing
 from datetime import date, datetime, timedelta
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Literal, no_type_check, Tuple
 from zoneinfo import ZoneInfo
 
 import itertools
@@ -14,8 +12,6 @@ from .models import (
     SmartmeterResult,
     SmartmeterResultYearly,
 )
-
-LOGGER = logging.getLogger('NetzNoeSmartmeterPortalApi')
 
 
 class NetzNoeSmartmeterPortalAuthError(Exception):
@@ -53,7 +49,8 @@ class NetzNoeSmartmeterPortalApi:
         if resp.status_code != 200:
             raise NetzNoeSmartmeterPortalDataError('Fetching daily data failed')
 
-        base_time = datetime(day.year, day.month, day.day, hour=0, minute=15, tzinfo=ZoneInfo('Europe/Vienna'))
+        base_time = datetime(day.year, day.month, day.day, hour=0, minute=15,
+                             tzinfo=ZoneInfo('Europe/Vienna')).astimezone(ZoneInfo('UTC'))
         return dict(map(
             lambda e: (
                 e.get('ec_id') if e.get('ec_id') else 'total',
@@ -152,41 +149,52 @@ class NetzNoeSmartmeterPortalApi:
             ), meter.get('energyCommunities', [])))
         ), resp.json()))
 
-    @staticmethod
-    def __get_values(data: dict, field: str, base_time: Union[date, datetime],
-                     time_increase: Dict[str, int]) -> Dict[Union[date, datetime], Union[float, SmartmeterDataQuality]]:
-        results: Dict[Union[date, datetime], Union[float, SmartmeterDataQuality]] = {}
+    def __get_values(self, data: dict, field: str, base_time: Union[date, datetime],
+                     time_increase: Dict[Literal['months', 'days', 'minutes'], int]
+                     ) -> List[Tuple[Union[date, datetime], Union[float, SmartmeterDataQuality]]]:
+        results: List[Tuple[Union[date, datetime], Union[float, SmartmeterDataQuality]]] = []
         for value in data.get(field, []):
             if value is not None:
+                converted_time = base_time
+                if isinstance(converted_time, datetime):
+                    converted_time = converted_time.astimezone(ZoneInfo('Europe/Vienna'))
                 if value in ('L1', 'L2', 'L3'):
-                    results[base_time] = SmartmeterDataQuality(value)
+                    results.append((converted_time, SmartmeterDataQuality(value)))
                 else:
-                    results[base_time] = value
+                    results.append((converted_time, value))
 
             # increase base_time for next value
-            if 'months' in time_increase and isinstance(base_time, date):
-                if base_time.month < 12:
-                    base_time = date(base_time.year, base_time.month + time_increase['months'], base_time.day)
-            else:
-                base_time += timedelta(**time_increase)
+            base_time = self._calc_next_datetime(base_time, time_increase)
         return results
 
     @staticmethod
-    def __process_peak_demand(data: dict, field: str) -> Dict[datetime, Union[float, SmartmeterDataQuality]]:
-        results: Dict[datetime, Union[float, SmartmeterDataQuality]] = {}
+    def __process_peak_demand(data: dict, field: str) -> List[Tuple[datetime, Union[float, SmartmeterDataQuality]]]:
+        results: List[Tuple[datetime, Union[float, SmartmeterDataQuality]]] = []
         for cnt, value in enumerate(data.get(field, [])):
             if value is not None:
                 timestamp = datetime.strptime(
                     data['peakDemandTimes'][cnt], '%Y-%m-%dT%H:%M:%S'
-                ).replace(tzinfo=ZoneInfo('Europe/Vienna'))
+                ).replace(tzinfo=ZoneInfo('UTC')).astimezone(ZoneInfo('Europe/Vienna'))
 
                 if value in ('L1', 'L2', 'L3'):
-                    results[timestamp] = SmartmeterDataQuality(value)
+                    results.append((timestamp, SmartmeterDataQuality(value)))
                 else:
-                    results[timestamp] = value
+                    results.append((timestamp, value))
         return results
 
-    @typing.no_type_check
+    def _calc_next_datetime(self, current_time: Union[date, datetime],
+                            time_increase: Dict[Literal['months', 'days', 'minutes'], int]) -> Union[date, datetime]:
+        if 'months' in time_increase and isinstance(current_time, date):
+            next_month = current_time.month + time_increase['months']
+            next_year = current_time.year + int(next_month / 12) if next_month > 12 else current_time.year
+            next_month = 12 if next_month % 12 == 0 else next_month % 12
+            return date(next_year, next_month, current_time.day)
+        elif 'days' in time_increase or 'minutes' in time_increase:
+            return current_time + timedelta(**time_increase)
+        else:
+            raise ValueError('Unsupported time_increase interval')
+
+    @no_type_check
     def __to_smartmeter_result(self, base_time: Union[date, datetime], data: dict,
                                time_increase: dict) -> SmartmeterResult:
         return SmartmeterResult(
@@ -206,7 +214,7 @@ class NetzNoeSmartmeterPortalApi:
             blind_power_feed=self.__get_values(data, 'blindPowerFeedValue', base_time, time_increase)
         )
 
-    @typing.no_type_check
+    @no_type_check
     def __to_smartmeter_result_yearly(self, base_time: date, data: dict, time_increase: dict) -> SmartmeterResultYearly:
         return SmartmeterResultYearly(
             values=self.__get_values(data, 'values', base_time, time_increase),

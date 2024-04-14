@@ -19,7 +19,7 @@ def save_as_csv(output_path: Path, filename_prefix: str,
             with Path(output_path / f'{filename_prefix}_{field.name}.csv').open('w') as fp:
                 writer = csv.DictWriter(fp, extrasaction='ignore', fieldnames=['date', 'time', 'value'])
                 writer.writeheader()
-                for timestamp, value in values.items():
+                for timestamp, value in values:
                     writer.writerow({
                         'date': timestamp.strftime('%d.%m.%Y'),
                         'time': timestamp.strftime('%H:%M:%S') if isinstance(timestamp, datetime) else '',
